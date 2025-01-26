@@ -1,0 +1,4 @@
+.git                 # Prevent unnecessary Git history in the image
+.github              # CI/CD workflows don't need to be baked into the image
+*.md                 # Documentation files like README.md are not needed in the image
+*.sh                 # Shell scripts (entrypoint or helper scripts) will be explicitly copied via Dockerfile
