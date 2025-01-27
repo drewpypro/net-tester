@@ -3,9 +3,9 @@
 set -e
 
 # Default values
-LE_EMAIL="${LE_EMAIL:-default@example.com}"
-LE_HOST="${LE_HOST:-net-test1.example.com}"
-CLOUDFLARE_API_TOKEN="${CLOUDFLARE_API_TOKEN:-}"
+LE_EMAIL="${LE_EMAIL:-LE_EMAIL_PLACEHOLDER}"
+LE_HOST="${LE_HOST:-LE_HOST_PLACEHOLDER}"
+CLOUDFLARE_API_TOKEN="${CLOUDFLARE_API_TOKEN:-CLOUDFLARE_API_TOKEN_PLACEHOLDER}"
 
 # Replace placeholders in configs
 echo "Replacing placeholders in configs..."
@@ -15,8 +15,7 @@ sed -i "s|CLOUDFLARE_API_TOKEN_PLACEHOLDER|$CLOUDFLARE_API_TOKEN|g" /etc/letsenc
 sed -i 's/^Listen 80$/Listen 9443/' /etc/apache2/httpd.conf
 
 # SSL generation with Cloudflare DNS validation
-echo "Checking for SSL generation..."
-if [ -n "$CLOUDFLARE_API_TOKEN" ] && [ "$LE_EMAIL" != "default@example.com" ]; then
+if [ "$LE_EMAIL" != "LE_EMAIL_PLACEHOLDER" ] && [ "$LE_HOST" != "LE_HOST_PLACEHOLDER" ] && [ "$CLOUDFLARE_API_TOKEN" != "CLOUDFLARE_API_TOKEN_PLACEHOLDER" ]; then
     echo "Generating SSL certificates for $LE_HOST with email $LE_EMAIL using Cloudflare DNS..."
     if certbot certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini \
         --dns-cloudflare-propagation-seconds 30 \
@@ -26,7 +25,7 @@ if [ -n "$CLOUDFLARE_API_TOKEN" ] && [ "$LE_EMAIL" != "default@example.com" ]; t
         echo "Failed to generate SSL certificates for $LE_HOST. Proceeding without SSL."
     fi
 else
-    echo "CLOUDFLARE_API_TOKEN or LE_EMAIL not provided. Skipping SSL generation."
+    echo "CLOUDFLARE_API_TOKEN, LE_EMAIL, or LE_HOST not provided. Skipping SSL generation."
     echo "Container will start with default configurations. Use /scripts/setup_ssl.sh to configure later."
 fi
 
