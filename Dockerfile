@@ -29,6 +29,8 @@ RUN mkdir -p /etc/nginx/sites-available /etc/nginx/sites-enabled
 COPY config/testsite.conf /etc/nginx/http.d/testsite.conf
 COPY config/apache.conf /etc/apache2/conf.d/testsite.conf
 COPY config/cloudflare.ini /etc/letsencrypt/cloudflare.ini
+COPY scripts/setup_ssl.sh /tmp/setup_ssl.sh
+RUN chmod +x /tmp/setup_ssl.sh
 RUN chmod 600 /etc/letsencrypt/cloudflare.ini
 COPY config/supervisord.conf /etc/supervisord.conf
 
